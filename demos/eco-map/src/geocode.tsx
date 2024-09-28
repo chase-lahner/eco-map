@@ -5,29 +5,33 @@ interface babyDestProp {
     updateParent : (newvalue: string) => void;
 }
 export const DestinationInput: React.FC<babyDestProp> = ({ updateParent })=> {
-    const [text, setText] = useState('Destination: ');
+    const [text, setText] = useState('');
     
     function handleChange(e: { target: { value: React.SetStateAction<string>; }; }) {
         setText(e.target.value);
         updateParent(text)
+        console.log("destination changed")
     }
 
     return (
         <>
         <input 
           type="text"
-          value={text}
+          placeholder="Enter Destination: "
           onChange={handleChange}
           className="input input-bordered input-primary w-full max-W-xs"/>
         </>
       
     );
 }
+
+
 interface checkProp {
   updateParent : (newvalue : boolean) => void;
+  type : string;
 }
 
-export const checkBox: React.FC<checkProp> = ({updateParent})=> {
+export const CheckBox: React.FC<checkProp> = ({updateParent, type})=> {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleChange = () => {
@@ -38,7 +42,7 @@ export const checkBox: React.FC<checkProp> = ({updateParent})=> {
     <>
     <div className="form-control">
     <label className="label cursor-pointer">
-      <span className="label-text">Remember me</span>
+      <span className="label-text">{type}</span>
       <input  type="checkbox" 
               checked={isChecked} 
               className="checkbox checkbox-primary"
