@@ -4,31 +4,34 @@ import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface babyDestProp {
     updateParent : (newvalue: string) => void;
+    type : string;
 }
-export const DestinationInput: React.FC<babyDestProp> = ({ updateParent })=> {
-    const [text, setText] = useState('Destination: ');
+export const DestinationInput: React.FC<babyDestProp> = ({ updateParent, type })=> {
+    const [text, setText] = useState('');
     
     function handleChange(e: { target: { value: React.SetStateAction<string>; }; }) {
         setText(e.target.value);
         updateParent(text)
+        console.log("destination changed")
     }
-
     return (
         <>
         <input 
           type="text"
-          value={text}
+          placeholder={type}
           onChange={handleChange}
           className="input input-bordered input-primary w-full max-W-xs"/>
         </>
-      
     );
 }
+
+
 interface checkProp {
   updateParent : (newvalue : boolean) => void;
+  type : string;
 }
 
-export const checkBox: React.FC<checkProp> = ({updateParent})=> {
+export const CheckBox: React.FC<checkProp> = ({updateParent, type})=> {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleChange = () => {
@@ -37,9 +40,10 @@ export const checkBox: React.FC<checkProp> = ({updateParent})=> {
     }
     return (
     <>
-    <div className="form-control">
+    <div className="form-contro">
     <label className="label cursor-pointer">
-      <span className="label-text">Remember me</span>
+      <span className="label-text">{type}</span>
+      
       <input  type="checkbox" 
               checked={isChecked} 
               className="checkbox checkbox-primary"
@@ -50,7 +54,7 @@ export const checkBox: React.FC<checkProp> = ({updateParent})=> {
 }
 
 interface geoReqInter {
-  request: google.maps.GeocoderRequest;
+  request: string
 }
 
 
@@ -58,7 +62,7 @@ const geocode : React.FC<geoReqInter> = ({request})  => {
   const geocoder = new google.maps.Geocoder();
 
   geocoder
-    .geocode(request)
+    .geocode({address : request})
     .then((result) => {
       const { results } = result;
       return results;
@@ -69,7 +73,7 @@ const geocode : React.FC<geoReqInter> = ({request})  => {
     return 0;
 }
 
-const geocodeFR : React.FC<geoReqInter> = ({request}) => {
+const GeocodeFR : React.FC<geoReqInter> = ({request}) => {
   const [geoResult, setGeoResult] = useState('');
 
   const geocodingLib = useMapsLibrary('geocoding');
@@ -81,7 +85,7 @@ const geocodeFR : React.FC<geoReqInter> = ({request}) => {
       if(!geocoder) return;
 
 
-      geocoder.geocode(request)
+      geocoder.geocode({address: request})
       .then(result => {
         const {results} = result;
 
@@ -91,13 +95,12 @@ const geocodeFR : React.FC<geoReqInter> = ({request}) => {
 
     },[geocoder])
 
-  return (
-    <>
-    <p>{geoResult}</p>
-    </>
+  return <><p>{geoResult}</p></>
 
-  )
+  
 }
+
+export default GeocodeFR;
 
 // function geocodeLatLng(request:) {
 //   const input = (document.getElementById("latlng") as HTMLInputElement).value;
