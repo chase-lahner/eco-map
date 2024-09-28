@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
+import {useMap, useMapsLibrary} from '@vis.gl/react-google-maps';
 
 interface babyDestProp {
     updateParent : (newvalue: string) => void;
@@ -48,7 +49,12 @@ export const checkBox: React.FC<checkProp> = ({updateParent})=> {
   </>);
 }
 
-function geocode(request: google.maps.GeocoderRequest): any {
+interface geoReqInter {
+  request: google.maps.GeocoderRequest;
+}
+
+
+const geocode : React.FC<geoReqInter> = ({request})  => {
   const geocoder = new google.maps.Geocoder();
 
   geocoder
@@ -61,6 +67,36 @@ function geocode(request: google.maps.GeocoderRequest): any {
       alert("Geocode was not successful for the following reason: " + e);
     });
     return 0;
+}
+
+const geocodeFR : React.FC<geoReqInter> = ({request}) => {
+  const [geoResult, setGeoResult] = useState('');
+
+  const geocodingLib = useMapsLibrary('geocoding');
+  const geocoder = useMemo(
+    () => geocodingLib && new geocodingLib.Geocoder(),[geocodingLib]
+    );
+
+    useEffect(() => {
+      if(!geocoder) return;
+
+
+      geocoder.geocode(request)
+      .then(result => {
+        const {results} = result;
+
+        let stringifiedResults : string = JSON.stringify(results, null, 2)
+        setGeoResult(stringifiedResults);
+      })
+
+    },[geocoder])
+
+  return (
+    <>
+    <p>{geoResult}</p>
+    </>
+
+  )
 }
 
 // function geocodeLatLng(request:) {
