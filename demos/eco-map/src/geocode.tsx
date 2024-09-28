@@ -3,8 +3,9 @@ import { useState } from 'react';
 
 interface babyDestProp {
     updateParent : (newvalue: string) => void;
+    type : string;
 }
-export const DestinationInput: React.FC<babyDestProp> = ({ updateParent })=> {
+export const DestinationInput: React.FC<babyDestProp> = ({ updateParent, type })=> {
     const [text, setText] = useState('');
     
     function handleChange(e: { target: { value: React.SetStateAction<string>; }; }) {
@@ -17,7 +18,7 @@ export const DestinationInput: React.FC<babyDestProp> = ({ updateParent })=> {
         <>
         <input 
           type="text"
-          placeholder="Enter Destination: "
+          placeholder={type}
           onChange={handleChange}
           className="input input-bordered input-primary w-full max-W-xs"/>
         </>
@@ -40,9 +41,10 @@ export const CheckBox: React.FC<checkProp> = ({updateParent, type})=> {
     }
     return (
     <>
-    <div className="form-control">
-    <label className="label cursor-pointer">
-      <span className="label-text">{type}</span>
+    <div className="form-contro float-end">
+    <label className="label cursor-pointer float-end">
+      <span className="label-text float-end">{type}</span>
+      
       <input  type="checkbox" 
               checked={isChecked} 
               className="checkbox checkbox-primary"
