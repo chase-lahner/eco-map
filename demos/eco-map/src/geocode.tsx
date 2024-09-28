@@ -89,7 +89,7 @@ const GeocodeFR : React.FC<geoReqInter> = ({request}) => {
       .then(result => {
         const {results} = result;
 
-        let stringifiedResults : string = JSON.stringify(results, null, 2)
+        let stringifiedResults : string = JSON.stringify(results[0].geometry.location, null, 2)
         setGeoResult(stringifiedResults);
       })
 
