@@ -13,7 +13,6 @@ export const DestinationInput: React.FC<babyDestProp> = ({ updateParent, type })
         updateParent(text)
         console.log("destination changed")
     }
-
     return (
         <>
         <input 
@@ -22,7 +21,6 @@ export const DestinationInput: React.FC<babyDestProp> = ({ updateParent, type })
           onChange={handleChange}
           className="input input-bordered input-primary w-full max-W-xs"/>
         </>
-      
     );
 }
 
@@ -41,9 +39,9 @@ export const CheckBox: React.FC<checkProp> = ({updateParent, type})=> {
     }
     return (
     <>
-    <div className="form-contro float-end">
-    <label className="label cursor-pointer float-end">
-      <span className="label-text float-end">{type}</span>
+    <div className="form-contro">
+    <label className="label cursor-pointer">
+      <span className="label-text">{type}</span>
       
       <input  type="checkbox" 
               checked={isChecked} 

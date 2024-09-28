@@ -4,9 +4,6 @@ import { DestinationInput, CheckBox} from "./geocode.tsx";
 interface checkProp {
     
 }
-
-const  MainPage: React.FC<checkProp> = () => {
-
     const [RouteCount, setRouteCount] = useState(5);
     const [source, setSource] = useState('')
     const [destination, setDestination] = useState('')
@@ -15,9 +12,7 @@ const  MainPage: React.FC<checkProp> = () => {
     const [transit, setTransit] = useState(false)
     const [twoWheel, setTwoWheel] = useState(false)
     const [walk, setWalk] = useState(false)
-
-
-
+const  MainPage: React.FC<checkProp> = () => {
     const position = {lat: 53.54992, lng: 10.00678};
 
     return (
@@ -33,8 +28,6 @@ const  MainPage: React.FC<checkProp> = () => {
                     <li><CheckBox updateParent={setTransit} type={"Public Transit:"} /></li>
                     <li><CheckBox updateParent={setTwoWheel} type={"Motor Biking:"} /></li>
                     <li><CheckBox updateParent={setWalk} type={"Walking:"} /></li>
-                    
-
                 </ul>
             </div>
             <div className="basis-1/2 bg-green-400">
@@ -42,13 +35,22 @@ const  MainPage: React.FC<checkProp> = () => {
                     <AdvancedMarker position={position}></AdvancedMarker>
                 </Map>
                 <h1>This is where map will be</h1>
-
             </div>
-
         </div>
     )
+}
 
-
+interface buttonProp {
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+const RouteButton = () => {
+    const handleEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        if(source == '' || destination == ''){return null;}// need a start and end!
+        if(!bike && !car && !walk && )
+    }
+    return <button className="btn btn-primary">
+            GO!</button>
 }
 
 let geoOut = {
