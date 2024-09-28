@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import { renderIntoDocument } from "react-dom/test-utils";
 
 
 function MainPage() {
 
     const [RouteCount, setRouteCount] = useState(5);
+    const position = {lat: 53.54992, lng: 10.00678};
 
     return (
         <div className="flex flex-row">
@@ -19,6 +21,9 @@ function MainPage() {
                 </ul>
             </div>
             <div className="basis-1/2 bg-green-400">
+                <Map defaultCenter={position} defaultZoom={10} mapId="DEMO_ID">
+                    <AdvancedMarker position={position}></AdvancedMarker>
+                </Map>
                 <h1>This is where map will be</h1>
 
             </div>
