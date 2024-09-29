@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import { DestinationInput, CheckBox} from "./geocode.tsx";
-import GeocodeFR  from "./geocode.tsx";
+import { GeocodeFR, geoReqInter } from "./geocode.tsx";
 interface checkProp {
     type: string;
 
@@ -12,7 +12,7 @@ interface checkProp {
 
    
 const  MainPage: React.FC = () => {
-    const [source, setSource] = useState('')
+    const [source, setSource] = useState<string>('')
     const [destination, setDestination] = useState('')
     const [bike, setBike] = useState(false)
     const [car, setCar] = useState(false)
@@ -20,9 +20,9 @@ const  MainPage: React.FC = () => {
     const [twoWheel, setTwoWheel] = useState(false)
     const [walk, setWalk] = useState(false)
     const position = {lat: 53.54992, lng: 10.00678};
+    const [click, setClick] = useState(false);
+    
     let test_address = "3609 Dawson St, Pittsburgh, PA 15213";
-    const [coords, setCoords] = useState({});
-
     
 
     return (
@@ -38,6 +38,8 @@ const  MainPage: React.FC = () => {
                     <li><CheckBox updateParent={setTransit} type={"Public Transit:"} /></li>
                     <li><CheckBox updateParent={setTwoWheel} type={"Motor Biking:"} /></li>
                     <li><CheckBox updateParent={setWalk} type={"Walking:"} /></li>
+                    <li><RouteButton updateClick={setClick} click={click} source={source} destination={destination} 
+                    bike={bike} car={car} walk={walk} transit={transit} twoWheel={twoWheel}/></li>
                 </ul>
             </div>
             <div className="basis-1/2 bg-green-400">
@@ -56,44 +58,63 @@ const  MainPage: React.FC = () => {
 }
 
 interface buttonProp {
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    updateClick: (newvalue : boolean) => void;
+    source:string
+    destination:string
+    bike: boolean
+    car:boolean
+    walk:boolean
+    transit:boolean
+    twoWheel:boolean
+    click:boolean
 }
-// const RouteButton = () => {
-//     const handleEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
-//         e.preventDefault();
-//         if(source == '' || destination == ''){return null;}// need a start and end!
-//       //  if(!bike && !car && !walk && )
-//     }
-//     return <button className="btn btn-primary">
-//             GO!</button>
-// }
+const RouteButton: React.FC<buttonProp> = ({updateClick, source,destination,bike,car,walk,transit,twoWheel,click}) => {
+    const clickHandle = () => {
+        updateClick(!click);
+    }
+    if(click) {
+        updateClick(!click)
+        const toReqSource : geoReqInter =  {request : source}
+        console.log(toReqSource)
+        const resultSource = GeocodeFR(toReqSource);
+        const toReqDest : geoReqInter = {request : destination}
+        console.log(toReqDest)
+        const resultDest = GeocodeFR(toReqDest);
+        console.log("result source" + resultSource);
+        if(source == '' || destination == ''){return null;}// need a start and end!
+        if(!bike && !car && !walk && !transit && !twoWheel){return null;}// need A mode of transport!
+        let routes: []
+        let geoOut = {
+            "origin":{
+              "location":{
+                "latLng":{resultSource}
+              }
+            },
+            "destination":{
+              "location":{
+                "latLng":{resultDest}
+            }
+            },
+            "travelMode": null,
+            "routingPreference": "TRAFFIC_AWARE",
+            "computeAlternativeRoutes": true,
+            "routeModifiers": {
+              "avoidTolls": false,
+              "avoidHighways": false,
+              "avoidFerries": false
+            },
+            "languageCode": "en-US",
+            "units": "IMPERIAL"
+          }
+        if(bike)
+        {
 
-let geoOut = {
-    "origin":{
-      "location":{
-        "latLng":{
-          "latitude": 37.419734,
-          "longitude": -122.0827784
         }
-      }
-    },
-    "destination":{
-      "location":{
-        "latLng":{
-          "latitude": 37.417670,
-          "longitude": -122.079595
-        }
-      }
-    },
-    "travelMode": "DRIVE",
-    "routingPreference": "TRAFFIC_AWARE",
-    "computeAlternativeRoutes": false,
-    "routeModifiers": {
-      "avoidTolls": false,
-      "avoidHighways": false,
-      "avoidFerries": false
-    },
-    "languageCode": "en-US",
-    "units": "IMPERIAL"
-  }
+
+    }
+    return <button onClick={clickHandle} className="btn btn-primary">GO!</button>
+}
+
+    
+
 export default MainPage;

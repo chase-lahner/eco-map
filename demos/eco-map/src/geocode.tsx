@@ -53,27 +53,12 @@ export const CheckBox: React.FC<checkProp> = ({updateParent, type})=> {
   </>);
 }
 
-interface geoReqInter {
+export interface geoReqInter {
   request: string
 }
 
 
-const geocode : React.FC<geoReqInter> = ({request})  => {
-  const geocoder = new google.maps.Geocoder();
-
-  geocoder
-    .geocode({address : request})
-    .then((result) => {
-      const { results } = result;
-      return results;
-    })
-    .catch((e) => {
-      alert("Geocode was not successful for the following reason: " + e);
-    });
-    return 0;
-}
-
-const GeocodeFR : React.FC<geoReqInter> = ({request}) => {
+export const GeocodeFR : React.FC<geoReqInter> = ({request}) => {
   const [geoResult, setGeoResult] = useState('');
 
   const geocodingLib = useMapsLibrary('geocoding');
@@ -81,7 +66,7 @@ const GeocodeFR : React.FC<geoReqInter> = ({request}) => {
     () => geocodingLib && new geocodingLib.Geocoder(),[geocodingLib]
     );
 
-    useEffect(() => {
+      
       if(!geocoder) return;
 
 
@@ -92,16 +77,10 @@ const GeocodeFR : React.FC<geoReqInter> = ({request}) => {
         let stringifiedResults : string = JSON.stringify(results[0].geometry.location, null, 2)
         setGeoResult(stringifiedResults);
       })
-
-    },[geocoder])
-
-  return <><p>{geoResult}</p></>
+  return geoResult
 
   
 }
-
-export default GeocodeFR;
-
 // function geocodeLatLng(request:) {
 //   const input = (document.getElementById("latlng") as HTMLInputElement).value;
 //   const latlngStr = input.split(",", 2);
